@@ -1,0 +1,17 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+	<body>
+		<h2> New Investment </h2>
+		<form action="{{url_for('newInvestment', catalog_id=catalog_id )}}" method = 'POST'>
+			<p>Name:</p>
+			<input type='text' size='30' name='name'><br><br>
+			<p>Description:</p>
+			<textarea type='text' cols='60' rows='8' name='description'></textarea><br><br>
+			<p>Price: </p>
+			<input type='text' size='30' name='price'><br><br>
+			<input type='submit' value='Create'>
+			<a href = "{{url_for('showInvestments', catalog_id = catalog_id)}}">Cancel</a>
+		</form>
+	</body>
+{% endblock %}

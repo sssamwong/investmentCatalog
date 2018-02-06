@@ -1,0 +1,15 @@
+<VirtualHost *:80>
+    ServerName 52.220.149.210
+    ServerAlias ec2-52-220-149-210.us-west-2.compute.amazonaws.com
+    ServerAdmin admin@52.220.149.210
+    WSGIDaemonProcess catalog python-path=/var/www/catalog/Udacity-FSWD/Project_Item_Catalog_App/vagrant:/var/www/catalog/Udacity-FSWD/Project_Item_Catalog_App/vagrant/venv/lib/python2.7/site-packages
+    WSGIProcessGroup catalog
+    WSGIScriptAlias / /var/www/catalog/catalog.wsgi
+    <Directory /var/www/catalog/Udacity-FSWD/Project_Item_Catalog_App/vagrant>
+        Order allow,deny
+        Allow from all
+    </Directory>
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    LogLevel warn
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>

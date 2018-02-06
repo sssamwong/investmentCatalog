@@ -1,0 +1,25 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+	<body>
+		<h3>Logout</h3><br>
+		<h4>Please click the below button to logout from the catalog.</h4><br>
+		<form action="{{url_for('gdisconnect')}}">
+			<input type='submit', value = 'Logout'>
+			<a href = "{{ url_for('showCatalog')}}"> Cancel </a>
+		</form>
+		<script>
+			function redirectToMain() {
+				$.ajax({
+					type: 'POST',
+					url: '/gdisconnect?',
+					success: function() {
+						setTimeout(function() {
+							window.location.href = "/catalog";
+						}, 4000);
+					}
+				});
+			};
+		</script>
+	</body>
+{% endblock %}

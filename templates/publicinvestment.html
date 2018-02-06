@@ -1,0 +1,25 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+	<body>
+			<div class="container">
+				<section>
+					<h2>Categories</h2>
+						{% for cata in catalog %}
+						<div>
+							<a href = "{{url_for('showInvestments', catalog_id=cata.id)}}">{{cata.name}}</a>
+						</div>
+						{% endfor %}
+				</section>
+				<section>
+					<h2>Investments</h2>
+					{% for investment in investments %}
+						<div>
+							<a href = "{{url_for('showInvestmentDetails', catalog_id=thisCatalog.id, investment_id=investment.id)}}">{{investment.name}}</a>
+						</div>
+					{% endfor %}
+				</section>
+			</div>
+
+	</body>
+{% endblock %}

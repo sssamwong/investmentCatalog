@@ -1,0 +1,13 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+	<body>
+		<h3>Edit Catalog</h3>
+		<form action="{{ url_for('editCatalog', catalog_id = i.id)}}" method = 'POST'>
+			<p>Name: </p>
+			<input type = "text" size = "30" name = "name" value = "{{i.name}}"><br><br>
+			<input type = "submit" value = "Edit">
+			<a href = "{{url_for('showCatalog', catalog_id = i.catalog_id)}}">Cancel</a>
+		</form>
+	</body>
+{% endblock %}

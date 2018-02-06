@@ -1,0 +1,15 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+<html>
+	<body>
+			<div class="container">
+				<h2>{{investment.name}}</h2>
+				<p>{{investment.description}}</p><br>
+				<h3>Price:</h3>
+				<p>{{investment.price}}</p>
+			</div>
+
+	</body>
+</html>
+{% endblock %}

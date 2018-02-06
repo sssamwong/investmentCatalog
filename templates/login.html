@@ -1,0 +1,53 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+	<head>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script src="//apis.google.com/js/platform.js?onload=start"> </script>
+	</head>
+	<body>
+		<h3>Login</h3><br>
+		<h4>Please click the below button to login.</h4><br>
+		<div id="signinButton">
+			<span class="g-signin"
+			data-scope="openid email"
+			data-clientid="112970290659-afl765o8qcjtku8or95je348qu2tgjgb.apps.googleusercontent.com"
+			data-redirecturi="postmessage"
+			data-accesstype="offline"
+			data-cookiepolicy="single_host_origin"
+			data-callback="signInCallback"
+			data-approvalprompt="force">
+			</span>
+		</div>
+		<div id="result"></div>
+		<script>
+			function signInCallback(authResult) {
+				if (authResult['code']) {
+					// Hide the sign-in button when the user is authorized
+					$('#signinButton').attr('style', 'display: none');
+					console.log(authResult);
+					// Check with Google server for the authentication and authorization
+					$.ajax({
+						type: 'POST',
+						url: '/gconnect?state={{STATE}}',
+						processData: false,
+						contentType: 'application/octet-stream; charset=utf-8',
+						data: authResult['code'],
+						success: function(result) {
+							if (result){
+								$('#result').html('Login Successful.</br>' + result + '</br>Redirecting...');
+								setTimeout(function() {
+									window.location.href = "/catalog";
+								}, 4000);
+							} else if (authResult['error']) {
+								console.log('Error: ' + authResult['error']);
+							} else {
+								$('#result').html('Failed to make a server-side call. Check configuration and console')
+							};
+						}
+					});
+				};
+			};
+		</script>
+	</body>
+{% endblock %}
