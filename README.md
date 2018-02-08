@@ -67,7 +67,8 @@
 			logging.basicConfig(stream=sys.stderr)
 			sys.path.insert(0,"/var/www/catalog/Udacity-FSWD/Project_Item_Catalog_App/vagrant")
 
-from FlaskApp import app as application
+			from FlaskApp import app as application
+
 
 
 ## Step 8. Install PostgreSQL

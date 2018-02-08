@@ -54,7 +54,7 @@ class Investment(Base):
       'price'        : self.price,
   }
 
-engine = create_engine('sqlite:///itemcatalog.db')
+engine = create_engine('postgresql://catalog:grader@localhost/catalog')
  
 
 Base.metadata.create_all(engine)
