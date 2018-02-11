@@ -1,17 +1,19 @@
 <VirtualHost *:80>
-        ServerName 52.220.149.210
-        ServerAdmin admin@52.220.149.210
-        WSGIScriptAlias / /var/www/catalog/catalog.wsgi
-        <Directory /var/www/catalog/catalog/>
-            Order allow,deny
-            Allow from all
-        </Directory>
-        Alias /static /var/www/catalog/catalog/static
-        <Directory /var/www/catalog/catalog/static/>
-            Order allow,deny
-            Allow from all
-        </Directory>
-        ErrorLog ${APACHE_LOG_DIR}/error.log
-        LogLevel warn
-        CustomLog ${APACHE_LOG_DIR}/access.log combined
+    ServerName 52.220.149.210
+    ServerAdmin admin@52.220.149.210
+    ServerAlias ec2-52-220-149-210.ap-southeast-1.compute.amazonaws.com
+    WSGIDaemonProcess catalog python-path=/var/www/catalog:/var/www/catalog/venv/lib/python2.7/site-packages
+    WSGIScriptAlias / /var/www/catalog/catalog.wsgi
+    <Directory /var/www/catalog/catalog/>
+        Order allow,deny
+        Allow from all
+    </Directory>
+    Alias /static /var/www/catalog/catalog/static
+    <Directory /var/www/catalog/catalog/static/>
+        Order allow,deny
+        Allow from all
+    </Directory>
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    LogLevel warn
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
 </VirtualHost>

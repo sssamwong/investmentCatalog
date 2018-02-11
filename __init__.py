@@ -13,7 +13,7 @@ import requests
 
 app = Flask(__name__)
 
-CLIENT_ID = json.loads(open('client_secrets.json', 'r').read())['web']['client_id'] # noqa
+CLIENT_ID = json.loads(open('/var/www/catalog/catalog/client_secrets.json', 'r').read())['web']['client_id'] # noqa
 
 # Connect to Database and create database session
 engine = create_engine('postgresql://catalog:grader@localhost/catalog')
@@ -42,7 +42,7 @@ def gconnect():
 	print "code is %s" % code
 	try:
 		# Pass the authorization code to credentials object
-		oauth_flow = flow_from_clientsecrets('client_secrets.json', scope='')
+		oauth_flow = flow_from_clientsecrets('/var/www/catalog/catalog/client_secrets.json', scope='')
 		oauth_flow.redirect_uri = 'postmessage'
 		credentials = oauth_flow.step2_exchange(code)
 		print "credentials is %s" % credentials

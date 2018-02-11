@@ -1,5 +1,10 @@
 # Linux Server Configuration
 
+	This is to deploy the Investment Catalog in Amazon Lightsail
+
+	IP address  : 52.220.149.210
+	Host Name		: ec2-52-220-149-210.ap-southeast-1.compute.amazonaws.com
+
 ## Step 1: Setup Amazon Lightsail
 		1. Connect using SSH
 
@@ -47,75 +52,87 @@
 		3. sudo a2enmod wsgi
 		4. sudo service apache2 start
 
-
 ## Step 8. Install git
 		1. sudo apt-get install git
-		2. git config --global user.name "Sam W"
-		3. git config --global user.email siuswong6@gmail.com
+		2. git config --global user.name "xxxxx"
+		3. git config --global user.email "xxxxx@gmail.com"
 
 ## Step 9: Clone the Catalog from Github
 		1. cd /var/www
 		2. sudo mkdir catalog
 		3. sudo chown -R grader:grader catalog
-		4. git clone https://github.com/sssamwong/Udacity-FSWD
-		5. cd catalog
+		4. git clone https://github.com/sssamwong/investmentCatalog catalog
 		6. sudo nano catalog.wsgi
 
 			#!/usr/bin/python
 			import sys
 			import logging
 			logging.basicConfig(stream=sys.stderr)
-			sys.path.insert(0,"/var/www/catalog/Udacity-FSWD/Project_Item_Catalog_App/vagrant")
+			sys.path.insert(0,"/var/www/catalog/")
 
-			from FlaskApp import app as application
+			from catalog import app as application
+			application.secret_key = 'super_secret_key'
 
+## Step 10. Install virual environment, Flask and other imports
+		1. sudo apt-get install python-pip
+		2. sudo pip install virtualenv
+		3. cd /var/www/catalog
+		4. sudo virtualenv venv
+		5. source venv/bin/activate
+		6. sudo chmod -R 777 venv
+		7. pip install Flask
+		8. pip install bleach httplib2 requests oauth2client sqlalchemy
+		9. sudo apt-get install python-psycopg2
 
+## Step 11. Configure and enable a new virtual host
+		1. sudo nano /etc/apache2/sites-available/catalog.conf
+		2. Paste the below lines of codes:
 
-## Step 8. Install PostgreSQL
+			<VirtualHost *:80>
+				ServerName 52.220.149.210
+				ServerAdmin admin@52.220.149.210
+				ServerAlias ec2-52-220-149-210.ap-southeast-1.compute.amazonaws.com
+				WSGIDaemonProcess catalog python-path=/var/www/catalog:/var/www/catalog/venv/lib/python2.7/site-packages
+				WSGIScriptAlias / /var/www/catalog/catalog.wsgi
+			<Directory /var/www/catalog/catalog/>
+				Order allow,deny
+				Allow from all
+			</Directory>
+			Alias /static /var/www/catalog/catalog/static
+			<Directory /var/www/catalog/catalog/static/>
+				Order allow,deny
+				Allow from all
+			</Directory>
+			ErrorLog ${APACHE_LOG_DIR}/error.log
+			LogLevel warn
+			CustomLog ${APACHE_LOG_DIR}/access.log combined
+			</VirtualHost>
+
+		3. sudo a2ensite catalog
+
+## Step 12. Install and configure PostgreSQL
 		1. sudo apt-get install libpq-dev python-dev
 		2. sudo apt-get install postgresql postgresql-contrib
-		3. 
+		3. sudo su - postgres
+		4. psql
+		5. CREATE USER catalog WITH PASSWORD 'grader';
+		6. ALTER USER catalog CREATEDB;
+		7. CREATE DATABASE catalog WITH OWNER catalog;
+		8. \c catalog
+		9. REVOKE ALL ON SCHEMA public FROM public;
+		10. GRANT ALL ON SCHEMA public TO catalog;
+		11. \q
+		12. exit
+		13. Update the database connection in __init__.py, database_setup.py and alotsofinvestment.py to:
 
+			engine = create_engine('postgresql://catalog:grader@localhost/catalog')
 
+		14. Setup the database with: sudo python /var/www/catalog/catalog/database_setup.py
+		15. Import the initial data with: sudo python /var/www/catalog/catalog/alotsofinvestment.py
 
-This is a website written in python code running on a virtual machine and terminal/command line to an investment catalog with function to add, modify and delete catagories and investments, if authorized and authenicated.
-
-## Software requirement
-
-Code was written in python 2, SQLAlchemy Google Oauth 2.0 for login. While the code is run in the virtual machine and terminal/command line, the below will be required:
-
-  1. Python 2
-  2. SQLAlchemy
-  3. A Google account
-  4. Virtual Machine (Vagrant and VirtualBox)
-  5. Terminal or command line
-
-### How to Use
-
-The code should be run from the terminal and command line following the below steps:
-
-  *    Download from the below github directory
-
-  Github [here](https://github.com/sssamwong/Udacity-FSWD/tree/master/Project_Item_Catalog_App/vagrant)
-
-  *  Open Terminal or command line
-  *  cd to the directory of the download
-  *  Connect to the virtual machine by typing 'vagrant up' and 'vagrant ssh' in the terminal or command line
-  *  cd /vagrant
-  *  Run the project.py by entering - 'python project.py'
-  *  Open Chrome or other browers
-  *  Go to http://localhost:8000/
-  *  Start to explore
-
-#### JSON API Endpoint
-
-API could be access through below:
-
-  *  http://localhost:8000/json/catalog
-  *  http://localhost:8000/json/catalog/<id of the category>
-
-#### Contribution
-
-Any suggestion or recommendation please send an email to siuswong6@gmail.com
-
-#### Credit to investopedia and wikipedia for the initial descriptions
+## Step 13. Update Google OAuth Authorized Javascript origins and redirect URL
+		1. Get the host name from http://www.hcidata.info/host2ip.cgi
+		2. sudo nano /etc/apache2/sites-available/catalog.conf and paste and following below ServerAdmin
+		ServerAlias HOSTNAME, i.e. ec2-52-220-149-210.ap-southeast-1.compute.amazonaws.com
+		3. Sudo a2ensite catalog
+		4. Update IP address and URL in Google Developer console
