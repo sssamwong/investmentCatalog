@@ -3,6 +3,7 @@
 	This is to deploy the Investment Catalog in Amazon Lightsail
 
 	IP address  : 52.220.149.210
+	SSH port		: 2200
 	Host Name		: ec2-52-220-149-210.ap-southeast-1.compute.amazonaws.com
 
 ## Step 1: Setup Amazon Lightsail
