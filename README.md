@@ -131,7 +131,7 @@
 		15. Import the initial data with: sudo python /var/www/catalog/catalog/alotsofinvestment.py
 
 ## Step 13. Update Google OAuth Authorized Javascript origins and redirect URL
-		1. Get the host name from [here] (http://www.hcidata.info/host2ip.cgi)
+		1. Get the host name from http://www.hcidata.info/host2ip.cgi
 		2. sudo nano /etc/apache2/sites-available/catalog.conf and paste and following below ServerAdmin
 		ServerAlias HOSTNAME, i.e. ec2-52-220-149-210.ap-southeast-1.compute.amazonaws.com
 		3. Sudo a2ensite catalog
@@ -140,4 +140,4 @@
 ## Step 14. Restart to launch to the application
 		1. sudo service apache2 restart
 
-Credit to: iliketomatoes [here] (https://github.com/iliketomatoes/linux_server_configuration), stueken [here] (https://github.com/stueken/FSND-P5_Linux-Server-Configuration), DigitalOcean and Google
+Credit to: [iliketomatoes](https://github.com/iliketomatoes/linux_server_configuration), [stueken](https://github.com/stueken/FSND-P5_Linux-Server-Configuration), DigitalOcean and Google
